@@ -3,7 +3,7 @@ module Test where
 open import Data.Nat
 
 foo : ℕ
-foo = 42
+foo = 45
 
 open import Level renaming (zero to lzero; suc to lsuc)
 open import Categories.Category
