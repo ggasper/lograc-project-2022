@@ -13,7 +13,7 @@ private
     o ℓ e : Level
 
 module _ {C : Category o ℓ e} (F : Endofunctor C) where
-  open Category C renaming (_≈_ to _≈ᶜ_; id to idc)
+  open Category C renaming (_≈_ to _≈ᶜ_; id to idc; sym-assoc to sym-assocᶜ)
   open HomReasoning
   open IntroElim C renaming (introʳ to intro-hom)
   open Definitions
@@ -29,13 +29,12 @@ module _ {C : Category o ℓ e} (F : Endofunctor C) where
             begin
             ((F-Algebra-Morphism.f f ∘ F-Algebra-Morphism.f g) ∘ F-Algebra.α A)
             ≈⟨ glue C (F-Algebra-Morphism.commutes f) (F-Algebra-Morphism.commutes g) ⟩
-            (F-Algebra.α C₁ ∘ Functor.F₁ F (F-Algebra-Morphism.f f) ∘ Functor.F₁ F (F-Algebra-Morphism.f g)) 
-            ≈⟨ pullʳ {!   !} (Functor.homomorphism F) ⟩
-            {!   !}
-            ≈⟨ {!   !} ⟩
+            (F-Algebra.α C₁ ∘ Functor.F₁ F (F-Algebra-Morphism.f f) ∘ Functor.F₁ F (F-Algebra-Morphism.f g))
+            ≈⟨ sym-assocᶜ ⟩
+            (((F-Algebra.α C₁ ∘ Functor.F₁ F (F-Algebra-Morphism.f f)) ∘ Functor.F₁ F (F-Algebra-Morphism.f g)))
+            ≈⟨ pullʳ   C  (Equiv.sym (Functor.homomorphism F)) ⟩
             (F-Algebra.α C₁ ∘ Functor.F₁ F (F-Algebra-Morphism.f f ∘ F-Algebra-Morphism.f g))
             ∎  }
-            -- commutes = glue {!   !} (F-Algebra-Morphism.commutes f) (F-Algebra-Morphism.commutes g) }
           ; assoc = {!!}
           ; sym-assoc = {!!}
           ; identityˡ = {!!}
