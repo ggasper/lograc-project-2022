@@ -23,9 +23,18 @@ module _ {C : Category o ℓ e} (F : Endofunctor C) where
           ; _⇒_ = F-Algebra-Morphism {o} {ℓ} {e} {C} {F}
           ; _≈_ = λ f g → C [ F-Algebra-Morphism.f f ≈ F-Algebra-Morphism.f g ] 
           ; id = id-aux 
-          ; _∘_ = λ f g → record { 
+          ; _∘_  = λ {A B C₁} f g → record { 
             f = F-Algebra-Morphism.f f ∘ F-Algebra-Morphism.f g ; 
-            commutes = glue {!  C !} {!   !} {!   !}  }
+            commutes = 
+            begin
+            ((F-Algebra-Morphism.f f ∘ F-Algebra-Morphism.f g) ∘ F-Algebra.α A)
+            ≈⟨ glue C (F-Algebra-Morphism.commutes f) (F-Algebra-Morphism.commutes g) ⟩
+            (F-Algebra.α C₁ ∘ Functor.F₁ F (F-Algebra-Morphism.f f) ∘ Functor.F₁ F (F-Algebra-Morphism.f g)) 
+            ≈⟨ pullʳ {!   !} (Functor.homomorphism F) ⟩
+            {!   !}
+            ≈⟨ {!   !} ⟩
+            (F-Algebra.α C₁ ∘ Functor.F₁ F (F-Algebra-Morphism.f f ∘ F-Algebra-Morphism.f g))
+            ∎  }
             -- commutes = glue {!   !} (F-Algebra-Morphism.commutes f) (F-Algebra-Morphism.commutes g) }
           ; assoc = {!!}
           ; sym-assoc = {!!}
