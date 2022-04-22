@@ -18,8 +18,8 @@ postulate fun-ext : ∀ {a b} → Extensionality a b
 
 module _ {o : Level} {I : Set o} (A : I → Set o) where
   open Category (Sets o)
-  PolynomialFunctor : Endofunctor (Sets o)
-  PolynomialFunctor = record
+  polynomial-functor : Endofunctor (Sets o)
+  polynomial-functor = record
                       { F₀ = λ x → Σ[ i ∈ I ] ((A i) → x )
                         ; F₁ = F₁-aux
                         ; identity = refl
