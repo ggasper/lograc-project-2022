@@ -33,5 +33,5 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
                       F₁-aux {A = B} f (i , g) = i , (f ∘ g)
                       F-resp-≈-aux : {A = B : Set o} {C : Set o} {f g : Sets o [ B , C ]} →
                        Sets o [ f ≈ g ] → Sets o [ F₁-aux f ≈ F₁-aux g ]
-                      F-resp-≈-aux {A = B} p {x = i , h} =  cong ( i ,_ ) ? --(fun-ext λ x → p)
+                      F-resp-≈-aux {A = B} p {x = i , h} =  cong ( i ,_ ) (fun-ext λ x → p)
 
