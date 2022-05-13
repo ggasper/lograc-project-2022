@@ -30,8 +30,12 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
   LambekLemma : Functor.F₀ F ((F-Algebra.A (Initial.⊥ I))) ≅ F-Algebra.A (Initial.⊥ I)
   LambekLemma = record { 
     from = F-Algebra.α (Initial.⊥ I) ; 
-    to = {! F-Algebra-Morphism.f (IsInitial.! (Initial.⊥-is-initial I)) !}; 
-    iso = {!   !} 
+    to =  F-Algebra-Morphism.f 
+      (Initial.⊥-is-initial I))
+      {record 
+        { A = Functor.F₀ F (F-Algebra.A (Initial.⊥ I)) ;
+          α = Functor.F₁ F (F-Algebra.α (Initial.⊥ I))}}) ; 
+    iso = record { isoˡ = {!   !} ; isoʳ = {!   !} }
     }
 
  
