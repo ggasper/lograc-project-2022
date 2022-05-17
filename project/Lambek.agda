@@ -6,12 +6,11 @@ open import Categories.Category.Instance.Sets
 open import Categories.Functor.Algebra
 open import Categories.Functor
 open import Categories.Morphism.Reasoning
--- open import Categories.Morphism
 open import Data.Product using (Σ ; _,_ ; proj₁ ; proj₂ ; Σ-syntax ; _×_ )
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; sym; trans; cong; cong₂; subst)
 open import Categories.Object.Initial
-open import AlgebraFunctor
+open import FAlgebraCategory
 open import PolynomialFunctor
 
 open import Categories.Morphism.Reasoning
@@ -21,17 +20,19 @@ private
   variable
     o ℓ e : Level
 
--- module _ {C : Category o ℓ e} (F : Endofunctor {o = o} {ℓ = ℓ} {e = e} C) (I : Initial (F-algebra-category {C = Category o ℓ e} F)) where
 module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-category F)) where
-  open Category C renaming (_≈_ to _≈ᶜ_; id to idc; assoc to assocᶜ; sym-assoc to sym-assocᶜ; identityˡ to identityˡᶜ; identityʳ to identityʳᶜ; identity² to identity²ᶜ; equiv to equivᶜ; ∘-resp-≈ to ∘-resp-≈ᶜ)
+  open Category C renaming (_≈_ to _≈ᶜ_; id to idᶜ; assoc to assocᶜ; sym-assoc to sym-assocᶜ; identityˡ to identityˡᶜ; identityʳ to identityʳᶜ; identity² to identity²ᶜ; equiv to equivᶜ; ∘-resp-≈ to ∘-resp-≈ᶜ ; ∘-resp-≈ʳ to ∘-resp-≈ʳᶜ ; _⇒_ to _⇒ᶜ_ ; _∘_ to _∘ᶜ_)
   open import Categories.Morphism C
-  -- open Initial I
   open HomReasoning
+  open Initial I
+  open Functor F renaming (identity to identity-F)
+  open IsInitial ⊥-is-initial renaming (! to ⊥→A ; !-unique₂ to ⊥→A-unique₂)
+  open F-Algebra ⊥
 
-  LambekLemma : Functor.F₀ F ((F-Algebra.A (Initial.⊥ I))) ≅ F-Algebra.A (Initial.⊥ I)
+  LambekLemma : F₀ A ≅ A
   LambekLemma = record { 
-    from = α-map ; 
-    to = i-map ; 
+    from = α ; 
+    to = i ; 
     iso = record { 
       isoˡ = isoˡ-aux ; 
       isoʳ = isoʳ-aux 
@@ -39,84 +40,66 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
     }
 
     where
-      α-map : Functor.F₀ F (F-Algebra.A (Initial.⊥ I)) ⇒ F-Algebra.A (Initial.⊥ I)
-      α-map = F-Algebra.α (Initial.⊥ I)
 
-      i-morphism : (F-algebra-category F Category.⇒ Initial.⊥ I) 
-        (record  { 
-        A = Functor.F₀ F (F-Algebra.A (Initial.⊥ I))  ; α = Functor.F₁ F (F-Algebra.α (Initial.⊥ I))  })
-      i-morphism = (IsInitial.! 
-        (Initial.⊥-is-initial I))
-        {record 
-          { A = Functor.F₀ F (F-Algebra.A (Initial.⊥ I)) ;
-            α = Functor.F₁ F (F-Algebra.α (Initial.⊥ I))}}
-
-      i-map : F-Algebra.A (Initial.⊥ I) ⇒ Functor.F₀ F (F-Algebra.A (Initial.⊥ I)) 
-      i-map = F-Algebra-Morphism.f i-morphism
+      i-morphism : 
+        (F-algebra-category F Category.⇒ ⊥) 
+        (record { A = F₀ A ; α = F₁ α })
+      i-morphism = ⊥→A {record 
+                        { A = F₀ A ;
+                          α = F₁ α}
+                        }
+      open F-Algebra-Morphism i-morphism renaming (f to i)
 
 
-
-      id-f-morph : F-Algebra-Morphism (Initial.⊥ I) (Initial.⊥ I) 
+      id-f-morph : F-Algebra-Morphism ⊥ ⊥
       id-f-morph = record { 
-        f = idc ; 
+        f = idᶜ ; 
         commutes = 
           begin
-            (idc ∘ F-Algebra.α (Initial.⊥ I)) 
+            idᶜ ∘ᶜ α 
           ≈⟨ identityˡᶜ ⟩
-            F-Algebra.α (Initial.⊥ I)
+            α
           ≈⟨ Equiv.sym identityʳᶜ ⟩
-           (F-Algebra.α (Initial.⊥ I) ∘ idc) 
-          ≈⟨ ∘-resp-≈ʳ (Equiv.sym (Functor.identity F))   ⟩
-            (F-Algebra.α (Initial.⊥ I) ∘ Functor.F₁ F idc)
+            α ∘ᶜ idᶜ 
+          ≈⟨ ∘-resp-≈ʳᶜ (Equiv.sym identity-F) ⟩
+            α ∘ᶜ F₁ idᶜ
           ∎
         }
 
-      i∘α≈Fα∘i : i-map ∘ α-map ≈ᶜ Functor.F₁ F (α-map ∘ i-map)  
-      i∘α≈Fα∘i =
+      i∘α≈F[α∘i] : i ∘ᶜ α ≈ᶜ F₁ (α ∘ᶜ i)  
+      i∘α≈F[α∘i] =
         begin
-          i-map ∘ F-Algebra.α (Initial.⊥ I)
-        ≈⟨ F-Algebra-Morphism.commutes i-morphism ⟩
-          Functor.F₁ F (F-Algebra.α (Initial.⊥ I)) ∘ Functor.F₁ F (F-Algebra-Morphism.f i-morphism)
-        ≈⟨ Equiv.sym (Functor.homomorphism F) ⟩
-          Functor.F₁ F (α-map ∘ i-map)
+          i ∘ᶜ α
+        ≈⟨ commutes ⟩
+          F₁ α ∘ᶜ F₁ i
+        ≈⟨ Equiv.sym homomorphism ⟩
+          F₁ (α ∘ᶜ i)
         ∎
 
-      α∘i-morph : F-Algebra-Morphism (Initial.⊥ I) (Initial.⊥ I)
+      α∘i-morph : F-Algebra-Morphism ⊥ ⊥
       α∘i-morph = record { 
-        f = α-map ∘ i-map ; 
+        f = α ∘ᶜ i ; 
         commutes = 
         begin
-          (α-map ∘ i-map) ∘ F-Algebra.α (Initial.⊥ I)
+          (α ∘ᶜ i) ∘ᶜ α
         ≈⟨ assocᶜ ⟩
-          α-map ∘ i-map ∘ F-Algebra.α (Initial.⊥ I)
-        ≈⟨ ∘-resp-≈ʳ (i∘α≈Fα∘i) ⟩
-          (F-Algebra.α (Initial.⊥ I) ∘ Functor.F₁ F (α-map ∘ i-map))
+          α ∘ᶜ i ∘ᶜ α
+        ≈⟨ ∘-resp-≈ʳᶜ i∘α≈F[α∘i] ⟩
+          α ∘ᶜ F₁ (α ∘ᶜ i)
         ∎
         }
-      
 
-      isoʳ-aux : 
-        F-Algebra.α (Initial.⊥ I) 
-        ∘ 
-        F-Algebra-Morphism.f (IsInitial.! (Initial.⊥-is-initial I)) 
-        ≈ᶜ 
-        idc
-      isoʳ-aux = (IsInitial.!-unique₂ (Initial.⊥-is-initial I)) (α∘i-morph) (id-f-morph)
+      isoʳ-aux : α ∘ᶜ i ≈ᶜ idᶜ
+      isoʳ-aux = ⊥→A-unique₂ α∘i-morph id-f-morph
 
-      isoˡ-aux :
-        F-Algebra-Morphism.f (IsInitial.! (Initial.⊥-is-initial I)) 
-        ∘ 
-        F-Algebra.α (Initial.⊥ I) 
-        ≈ᶜ 
-        idc
+      isoˡ-aux : i ∘ᶜ α ≈ᶜ idᶜ
       isoˡ-aux = 
         begin
-          (F-Algebra-Morphism.f (IsInitial.! (Initial.⊥-is-initial I)) ∘ F-Algebra.α (Initial.⊥ I))
-        ≈⟨ i∘α≈Fα∘i ⟩
-          Functor.F₁ F (α-map ∘ i-map)
-        ≈⟨ Functor.F-resp-≈ F isoʳ-aux ⟩
-          Functor.F₁ F idc
-        ≈⟨ Functor.identity F ⟩
-          idc
+          i ∘ᶜ α
+        ≈⟨ i∘α≈F[α∘i] ⟩
+          F₁ (α ∘ᶜ i)
+        ≈⟨ F-resp-≈ isoʳ-aux ⟩
+          F₁ idᶜ
+        ≈⟨ identity-F ⟩
+          idᶜ
         ∎
- 

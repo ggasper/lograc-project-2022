@@ -1,4 +1,4 @@
-module AlgebraFunctor where
+module FAlgebraCategory where
 
 open import Level
 open import Categories.Category 
@@ -48,30 +48,39 @@ module _ {C : Category o ℓ e} (F : Endofunctor C) where
             idc ; 
           commutes = 
             begin 
-              (idc ∘ F-Algebra.α A) 
+              idc ∘ α
             ≈⟨ identityˡᶜ ⟩
-              F-Algebra.α A
-            ≈⟨ intro-hom (Functor.identity F) ⟩
-              (F-Algebra.α A ∘ Functor.F₁ F idc)
+              α
+            ≈⟨ intro-hom identity ⟩
+              α ∘ F₁ idc
             ∎
-        }
+          }
+            where
+              open F-Algebra A
+              open Functor F
 
       composition-aux : {A B D : F-Algebra F} → 
         F-Algebra-Morphism B D → 
         F-Algebra-Morphism A B → 
         F-Algebra-Morphism A D 
-      composition-aux {A} {B} {D} f g = 
+      composition-aux {A} {B} {D} f-morphism g-morphism = 
         record { 
           f = 
-            F-Algebra-Morphism.f f ∘ F-Algebra-Morphism.f g ; 
+            f ∘ g ; 
           commutes = 
             begin
-              ((F-Algebra-Morphism.f f ∘ F-Algebra-Morphism.f g) ∘ F-Algebra.α A)
-            ≈⟨ glue C (F-Algebra-Morphism.commutes f)        (F-Algebra-Morphism.commutes g) ⟩
-              (F-Algebra.α D ∘ Functor.F₁ F (F-Algebra-Morphism.f f) ∘ Functor.F₁ F (F-Algebra-Morphism.f g))
+              (f ∘ g) ∘ α
+            ≈⟨ glue C commutes-f commutes-g ⟩
+              β ∘ F₁ f ∘ F₁ g
             ≈⟨ sym-assocᶜ ⟩
-              (((F-Algebra.α D ∘ Functor.F₁ F (F-Algebra-Morphism.f f)) ∘ Functor.F₁ F (F-Algebra-Morphism.f g)))
-            ≈⟨ pullʳ C (Equiv.sym (Functor.homomorphism F)) ⟩
-              (F-Algebra.α D ∘ Functor.F₁ F (F-Algebra-Morphism.f f ∘ F-Algebra-Morphism.f g))
+              (β ∘ F₁ f) ∘ F₁ g
+            ≈⟨ pullʳ C (Equiv.sym homomorphism) ⟩
+              β ∘ F₁ (f ∘ g)
             ∎ 
           }
+            where
+              open F-Algebra-Morphism f-morphism renaming (commutes to commutes-f)
+              open F-Algebra-Morphism g-morphism renaming (f to g ; commutes to commutes-g) 
+              open Functor F
+              open F-Algebra A
+              open F-Algebra D renaming (α to β)
