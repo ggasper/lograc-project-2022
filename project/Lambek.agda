@@ -33,7 +33,7 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
     from = α-map ; 
     to = i-map ; 
     iso = record { 
-      isoˡ = {!   !} ; 
+      isoˡ = isoˡ-aux ; 
       isoʳ = isoʳ-aux 
       }
     }
@@ -71,17 +71,52 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
           ∎
         }
 
+      i∘α≈Fα∘i : i-map ∘ α-map ≈ᶜ Functor.F₁ F (α-map ∘ i-map)  
+      i∘α≈Fα∘i =
+        begin
+          i-map ∘ F-Algebra.α (Initial.⊥ I)
+        ≈⟨ F-Algebra-Morphism.commutes i-morphism ⟩
+          Functor.F₁ F (F-Algebra.α (Initial.⊥ I)) ∘ Functor.F₁ F (F-Algebra-Morphism.f i-morphism)
+        ≈⟨ Equiv.sym (Functor.homomorphism F) ⟩
+          Functor.F₁ F (α-map ∘ i-map)
+        ∎
+
       α∘i-morph : F-Algebra-Morphism (Initial.⊥ I) (Initial.⊥ I)
       α∘i-morph = record { 
         f = α-map ∘ i-map ; 
-        commutes = {! !} 
+        commutes = 
+        begin
+          (α-map ∘ i-map) ∘ F-Algebra.α (Initial.⊥ I)
+        ≈⟨ assocᶜ ⟩
+          α-map ∘ i-map ∘ F-Algebra.α (Initial.⊥ I)
+        ≈⟨ ∘-resp-≈ʳ (i∘α≈Fα∘i) ⟩
+          (F-Algebra.α (Initial.⊥ I) ∘ Functor.F₁ F (α-map ∘ i-map))
+        ∎
         }
       
+
       isoʳ-aux : 
         F-Algebra.α (Initial.⊥ I) 
         ∘ 
         F-Algebra-Morphism.f (IsInitial.! (Initial.⊥-is-initial I)) 
         ≈ᶜ 
         idc
-      isoʳ-aux = {!   !}
+      isoʳ-aux = (IsInitial.!-unique₂ (Initial.⊥-is-initial I)) (α∘i-morph) (id-f-morph)
+
+      isoˡ-aux :
+        F-Algebra-Morphism.f (IsInitial.! (Initial.⊥-is-initial I)) 
+        ∘ 
+        F-Algebra.α (Initial.⊥ I) 
+        ≈ᶜ 
+        idc
+      isoˡ-aux = 
+        begin
+          (F-Algebra-Morphism.f (IsInitial.! (Initial.⊥-is-initial I)) ∘ F-Algebra.α (Initial.⊥ I))
+        ≈⟨ i∘α≈Fα∘i ⟩
+          Functor.F₁ F (α-map ∘ i-map)
+        ≈⟨ Functor.F-resp-≈ F isoʳ-aux ⟩
+          Functor.F₁ F idc
+        ≈⟨ Functor.identity F ⟩
+          idc
+        ∎
  
