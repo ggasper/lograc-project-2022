@@ -21,7 +21,9 @@ private
     o ℓ e : Level
 
 module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-category F)) where
-  open Category C renaming (_≈_ to _≈ᶜ_; id to idᶜ; assoc to assocᶜ; sym-assoc to sym-assocᶜ; identityˡ to identityˡᶜ; identityʳ to identityʳᶜ; identity² to identity²ᶜ; equiv to equivᶜ; ∘-resp-≈ to ∘-resp-≈ᶜ ; ∘-resp-≈ʳ to ∘-resp-≈ʳᶜ ; _⇒_ to _⇒ᶜ_ ; _∘_ to _∘ᶜ_)
+  open Category C renaming (_≈_ to _≈ᶜ_; id to idᶜ; assoc to assocᶜ; sym-assoc to sym-assocᶜ;
+    identityˡ to identityˡᶜ; identityʳ to identityʳᶜ; identity² to identity²ᶜ; equiv to equivᶜ;
+    ∘-resp-≈ to ∘-resp-≈ᶜ ; ∘-resp-≈ʳ to ∘-resp-≈ʳᶜ ; _⇒_ to _⇒ᶜ_ ; _∘_ to _∘ᶜ_)
   open import Categories.Morphism C
   open HomReasoning
   open Initial I
@@ -40,7 +42,10 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
     }
 
     where
-
+      {-
+        The morphism in the F-algebra category from the F-algebra ⊥ to F⊥ where ⊥ is the initial object.
+        Exists because ⊥ is the initial object.
+      -}
       i-morphism : 
         (F-algebra-category F Category.⇒ ⊥) 
         (record { A = F₀ A ; α = F₁ α })
@@ -50,48 +55,45 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
                         }
       open F-Algebra-Morphism i-morphism renaming (f to i)
 
-
+      -- The identity morphism from ⊥ to ⊥
       id-f-morph : F-Algebra-Morphism ⊥ ⊥
-      id-f-morph = record { 
-        f = idᶜ ; 
-        commutes = 
-          begin
-            idᶜ ∘ᶜ α 
-          ≈⟨ identityˡᶜ ⟩
-            α
-          ≈⟨ Equiv.sym identityʳᶜ ⟩
-            α ∘ᶜ idᶜ 
-          ≈⟨ ∘-resp-≈ʳᶜ (Equiv.sym identity-F) ⟩
-            α ∘ᶜ F₁ idᶜ
-          ∎
-        }
+      id-f-morph = Category.id (F-algebra-category F)
 
       i∘α≈F[α∘i] : i ∘ᶜ α ≈ᶜ F₁ (α ∘ᶜ i)  
       i∘α≈F[α∘i] =
         begin
           i ∘ᶜ α
-        ≈⟨ commutes ⟩
+        ≈⟨ commutes ⟩ -- property of the F-algebra morphism i
           F₁ α ∘ᶜ F₁ i
         ≈⟨ Equiv.sym homomorphism ⟩
           F₁ (α ∘ᶜ i)
         ∎
 
+      -- the F-algebra morphism from ⊥ to ⊥ induced by α ∘ i
       α∘i-morph : F-Algebra-Morphism ⊥ ⊥
       α∘i-morph = record { 
         f = α ∘ᶜ i ; 
         commutes = 
-        begin
-          (α ∘ᶜ i) ∘ᶜ α
-        ≈⟨ assocᶜ ⟩
-          α ∘ᶜ i ∘ᶜ α
-        ≈⟨ ∘-resp-≈ʳᶜ i∘α≈F[α∘i] ⟩
-          α ∘ᶜ F₁ (α ∘ᶜ i)
-        ∎
+          begin
+            (α ∘ᶜ i) ∘ᶜ α
+          ≈⟨ assocᶜ ⟩
+            α ∘ᶜ i ∘ᶜ α
+          ≈⟨ ∘-resp-≈ʳᶜ i∘α≈F[α∘i] ⟩
+            α ∘ᶜ F₁ (α ∘ᶜ i)
+          ∎
         }
 
+      {-
+        Shows that α ∘ᶜ iᶜ ≈ idᶜ by using that there is only one morphism from ⊥ to ⊥
+        and that α ∘ᶜ iᶜ, idᶜ are both such morphisms.
+      -}
       isoʳ-aux : α ∘ᶜ i ≈ᶜ idᶜ
       isoʳ-aux = ⊥→A-unique₂ α∘i-morph id-f-morph
 
+      {-
+        Proof that i ∘ᶜ αᶜ ≈ idᶜ that follows from α ∘ᶜ i ≈ᶜ idᶜ and
+        the fact that F₁(α ∘ᶜ i) = i ∘ᶜ αᶜ.
+      -}
       isoˡ-aux : i ∘ᶜ α ≈ᶜ idᶜ
       isoˡ-aux = 
         begin

@@ -1,5 +1,8 @@
-module FAlgebraCategory where
+{-
+  This file defines the F-Algebra categories
+-}
 
+module FAlgebraCategory where
 open import Level
 open import Categories.Category 
 open import Categories.Functor.Algebra
@@ -11,7 +14,9 @@ private
     o ℓ e : Level
 
 module _ {C : Category o ℓ e} (F : Endofunctor C) where
-  open Category C renaming (_≈_ to _≈ᶜ_; id to idc; assoc to assocᶜ; sym-assoc to sym-assocᶜ; identityˡ to identityˡᶜ; identityʳ to identityʳᶜ; identity² to identity²ᶜ; equiv to equivᶜ; ∘-resp-≈ to ∘-resp-≈ᶜ)
+  open Category C renaming (_≈_ to _≈ᶜ_; id to idc; assoc to assocᶜ;
+    sym-assoc to sym-assocᶜ; identityˡ to identityˡᶜ; identityʳ to identityʳᶜ;
+    identity² to identity²ᶜ; equiv to equivᶜ; ∘-resp-≈ to ∘-resp-≈ᶜ)
   open HomReasoning
   open IntroElim C renaming (introʳ to intro-hom)
   F-algebra-category : Category (o ⊔ ℓ) (ℓ ⊔ e) e
@@ -24,8 +29,8 @@ module _ {C : Category o ℓ e} (F : Endofunctor C) where
                 ≈ 
               F-Algebra-Morphism.f g 
               ] 
-          ; id = id-aux 
-          ; _∘_ = composition-aux
+          ; id = id-aux -- id is the F-algebra that for a given object A consists of A and the identity morphism in the underlying category C
+          ; _∘_ = composition-aux -- 
           ; assoc = assocᶜ
           ; sym-assoc = sym-assocᶜ
           ; identityˡ = identityˡᶜ
@@ -44,9 +49,8 @@ module _ {C : Category o ℓ e} (F : Endofunctor C) where
       id-aux : {A : F-Algebra F} → F-Algebra-Morphism A A
       id-aux {A} = 
         record { 
-          f = 
-            idc ; 
-          commutes = 
+          f = idc ; -- the identity in the category C
+          commutes = -- proof that idc ∘ α = α ∘ F₁ idc
             begin 
               idc ∘ α
             ≈⟨ identityˡᶜ ⟩
@@ -54,10 +58,10 @@ module _ {C : Category o ℓ e} (F : Endofunctor C) where
             ≈⟨ intro-hom identity ⟩
               α ∘ F₁ idc
             ∎
-          }
-            where
-              open F-Algebra A
-              open Functor F
+        }
+        where
+          open F-Algebra A
+          open Functor F
 
       composition-aux : {A B D : F-Algebra F} → 
         F-Algebra-Morphism B D → 
@@ -65,8 +69,7 @@ module _ {C : Category o ℓ e} (F : Endofunctor C) where
         F-Algebra-Morphism A D 
       composition-aux {A} {B} {D} f-morphism g-morphism = 
         record { 
-          f = 
-            f ∘ g ; 
+          f = f ∘ g ; 
           commutes = 
             begin
               (f ∘ g) ∘ α
@@ -78,9 +81,9 @@ module _ {C : Category o ℓ e} (F : Endofunctor C) where
               β ∘ F₁ (f ∘ g)
             ∎ 
           }
-            where
-              open F-Algebra-Morphism f-morphism renaming (commutes to commutes-f)
-              open F-Algebra-Morphism g-morphism renaming (f to g ; commutes to commutes-g) 
-              open Functor F
-              open F-Algebra A
-              open F-Algebra D renaming (α to β)
+          where
+            open F-Algebra-Morphism f-morphism renaming (commutes to commutes-f)
+            open F-Algebra-Morphism g-morphism renaming (f to g ; commutes to commutes-g) 
+            open Functor F
+            open F-Algebra A
+            open F-Algebra D renaming (α to β)

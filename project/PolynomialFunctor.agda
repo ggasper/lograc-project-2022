@@ -3,6 +3,9 @@ module PolynomialFunctor where
 open import Level
 open import Categories.Category
 open import Categories.Category.Instance.Sets
+{-
+  Defines polynomial functors on the category Sets
+-}
 open import Categories.Functor.Algebra
 open import Categories.Functor
 open import Categories.Morphism.Reasoning

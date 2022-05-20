@@ -1,3 +1,6 @@
+{-
+  The construction of the initial object in the F-algebra category
+-}
 module PolynomialInitial where
 
 open import Level
@@ -16,15 +19,24 @@ open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; step-≡; _∎)
 
 
 module _ {o : Level} {I : Set o} (A : I → Set o) where
-
+  {-
+    The structure representing trees which have children parametrized by I
+  -}
   data Tree : Set o where 
     Node : Σ[ i ∈ I ] (A i → Tree) → Tree 
 
+  {-
+    The F-algebra category of some polynomial functor
+  -}
   polynomial-category : Category (suc o ⊔ o) (o ⊔ o) o
   polynomial-category = F-algebra-category (polynomial-functor A)
+  
   open Category polynomial-category 
   open Category (Sets o) renaming (_⇒_ to _⇒ˢ_ ; Obj to Objˢ)
 
+  {-
+    The definition of the initial object in a polynomial category
+  -}
   polynomial-initial : Initial polynomial-category
   polynomial-initial = record { 
     ⊥ = ⊥-aux ;
@@ -32,6 +44,9 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
     }
 
     where
+      {-
+        The map Σ Tree^(Aᵢ) → Tree
+      -}
       α-aux : (Functor.F₀ (polynomial-functor A) Tree) 
         ⇒ˢ 
         Tree
