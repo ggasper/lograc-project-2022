@@ -19,24 +19,18 @@ open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; step-≡; _∎)
 
 
 module _ {o : Level} {I : Set o} (A : I → Set o) where
-  {-
-    The structure representing trees which have children parametrized by I
-  -}
+  -- The structure representing trees which have children parametrized by Aᵢ
   data Tree : Set o where 
     Node : Σ[ i ∈ I ] (A i → Tree) → Tree 
 
-  {-
-    The F-algebra category of some polynomial functor
-  -}
+  -- The F-algebra category of some polynomial functor
   polynomial-category : Category (suc o ⊔ o) (o ⊔ o) o
   polynomial-category = F-algebra-category (polynomial-functor A)
   
   open Category polynomial-category 
   open Category (Sets o) renaming (_⇒_ to _⇒ˢ_ ; Obj to Objˢ)
 
-  {-
-    The definition of the initial object in a polynomial category
-  -}
+  -- The definition of the initial object in a polynomial category
   polynomial-initial : Initial polynomial-category
   polynomial-initial = record { 
     ⊥ = ⊥-aux ;
@@ -44,20 +38,20 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
     }
 
     where
-      {-
-        The map Σ Tree^(Aᵢ) → Tree
-      -}
+      -- The map Σ Tree^(Aᵢ) → Tree
       α-aux : (Functor.F₀ (polynomial-functor A) Tree) 
         ⇒ˢ 
         Tree
       α-aux s = Node s
-
+      
+      -- The initial object for the category of the polynomial functor
       ⊥-aux : Obj
       ⊥-aux = record { 
         A = Tree ; 
         α = α-aux 
         }
 
+      -- Inductive definition of the function from Tree to any F-algebra of a polynomial functor.
       f-tree-aux : {B : F-Algebra (polynomial-functor A)} → 
         Tree → 
         F-Algebra.A B
@@ -67,13 +61,14 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
           λ a → f-tree-aux {record { A = B ; α = β }} (g a)
           )
 
-
+      -- F-algebra morphism from the initial object to any other object in the F-algebra category of a polynomial functor.
       !-aux : {B : F-Algebra (polynomial-functor A)} → F-Algebra-Morphism ⊥-aux B
       !-aux {B} = record { 
         f = f-tree-aux {B} ; 
         commutes = refl 
         }
 
+      -- Proof that the morphism from the initial object is unique.
       !-unique-aux : {A = B : F-Algebra (polynomial-functor A)}
         → (f : F-Algebra-Morphism ⊥-aux B) 
         → (Sets o [ f-tree-aux {B} ≈ F-Algebra-Morphism.f f ])
@@ -90,14 +85,14 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
               (fun-ext λ y → !-unique-aux (record { f = f ; commutes = commutes })) 
             ⟩
             β (i , (λ a → f (g a)))
-          ≡⟨ sym commutes ⟩
+          ≡⟨ sym commutes ⟩ -- use the commutativity of the diagram of the F-morphism of f
             f (Node (i , g))
           ∎
 
       is-initial-aux : IsInitial polynomial-category ⊥-aux
       is-initial-aux = record {   
-        ! = !-aux ; 
-        !-unique = !-unique-aux 
+        ! = !-aux ; -- function that gives the morphism from the initial object to any other object
+        !-unique = !-unique-aux -- uniqueness of said morphism
         }
 
 
