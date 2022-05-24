@@ -14,7 +14,7 @@ private
     o ℓ e : Level
 
 module _ {C : Category o ℓ e} (F : Endofunctor C) where
-  open Category C renaming (_≈_ to _≈ᶜ_; id to idc; assoc to assocᶜ;
+  open Category C renaming (_≈_ to _≈ᶜ_; id to idᶜ; assoc to assocᶜ;
     sym-assoc to sym-assocᶜ; identityˡ to identityˡᶜ; identityʳ to identityʳᶜ;
     identity² to identity²ᶜ; equiv to equivᶜ; ∘-resp-≈ to ∘-resp-≈ᶜ)
   open HomReasoning
@@ -30,7 +30,7 @@ module _ {C : Category o ℓ e} (F : Endofunctor C) where
               F-Algebra-Morphism.f g 
               ] 
           ; id = id-aux -- id is the F-algebra that for a given object A consists of A and the identity morphism in the underlying category C
-          ; _∘_ = composition-aux -- 
+          ; _∘_ = composition-aux 
           ; assoc = assocᶜ
           ; sym-assoc = sym-assocᶜ
           ; identityˡ = identityˡᶜ
@@ -49,14 +49,14 @@ module _ {C : Category o ℓ e} (F : Endofunctor C) where
       id-aux : {A : F-Algebra F} → F-Algebra-Morphism A A
       id-aux {A} = 
         record { 
-          f = idc ; -- the identity in the category C
-          commutes = -- proof that idc ∘ α = α ∘ F₁ idc
+          f = idᶜ ; -- the identity in the category C
+          commutes = -- proof that idᶜ ∘ α = α ∘ F₁ idᶜ
             begin 
-              idc ∘ α
+              idᶜ ∘ α
             ≈⟨ identityˡᶜ ⟩
               α
             ≈⟨ intro-hom identity ⟩
-              α ∘ F₁ idc
+              α ∘ F₁ idᶜ
             ∎
         }
         where
@@ -67,18 +67,18 @@ module _ {C : Category o ℓ e} (F : Endofunctor C) where
         F-Algebra-Morphism B D → 
         F-Algebra-Morphism A B → 
         F-Algebra-Morphism A D 
-      composition-aux {A} {B} {D} f-morphism g-morphism = 
+      composition-aux {A} {B} {D} g-morphism f-morphism = 
         record { 
-          f = f ∘ g ; 
+          f = g ∘ f ; 
           commutes = 
             begin
-              (f ∘ g) ∘ α
-            ≈⟨ glue C commutes-f commutes-g ⟩
-              β ∘ F₁ f ∘ F₁ g
+              (g ∘ f) ∘ α
+            ≈⟨ glue C commutes-g commutes-f ⟩
+              β ∘ F₁ g ∘ F₁ f
             ≈⟨ sym-assocᶜ ⟩
-              (β ∘ F₁ f) ∘ F₁ g
+              (β ∘ F₁ g) ∘ F₁ f
             ≈⟨ pullʳ C (Equiv.sym homomorphism) ⟩
-              β ∘ F₁ (f ∘ g)
+              β ∘ F₁ (g ∘ f)
             ∎ 
           }
           where

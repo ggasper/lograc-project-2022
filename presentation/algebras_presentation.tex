@@ -32,17 +32,39 @@
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]
+\begin{frame}
 \frametitle{Motivation}
 
+Modelling inductive types.
 
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{F-Algebras}
+
+category $C$, endofunctor $F \colon C \to C$
+\\~\\
+\pause
+
+
 \[
-\begin{tikzcd}[transform canvas={scale=2}]
+\begin{tikzcd}[transform canvas={scale=1.5}]
+	{FA} && A 
+	\arrow["\alpha", from=1-1, to=1-3]
+\end{tikzcd}
+\]
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{F-Algebras}
+
+category $C$, endofunctor $F \colon C \to C$
+\\~\\~\\~\\
+
+\[
+\begin{tikzcd}[transform canvas={scale=1.5}]
 	{FA} && A \\
 	\\
 	{FB} && B
@@ -58,13 +80,20 @@
 \begin{frame}
 \frametitle{Initial Objects}
 
+Such an object $I$, that for every object $X$, \\ there exist a \textbf{unique} morphism $I \to X$.
+
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 \frametitle{Lambek Lemma}
+\begin{lemma}[Lambek]
+If $I = (A, \alpha)$ is an initial algebra, then $A$ is isomorphic to $FA$ via $\alpha$.
+\end{lemma}
+\quad \\~\\~\\
+\pause
 
 \[
-\begin{tikzcd}[transform canvas={scale=2}]
+\begin{tikzcd}[transform canvas={scale=1.5}]
 	FA && A \\
 	\\
 	{F(FA)} && FA
@@ -110,7 +139,15 @@
 \begin{frame}
 \frametitle{Problems in Implementation}
 
+\pause
 
+\begin{figure}[h]
+\includegraphics[width=12cm]{yellow.PNG}
+\end{figure}
+
+\pause
+
+Initial $I\ \Rightarrow$ record $\{\ \bot \ ,\ \bot \text{-is-initial}\ \}\ \Rightarrow$ record $\{\ A \ ,\ \alpha \ \}$ .
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
