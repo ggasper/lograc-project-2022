@@ -20,11 +20,11 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
   open Category (Sets o)
   polynomial-functor : Endofunctor (Sets o)
   polynomial-functor = record
-      { F₀ = λ x → Σ[ i ∈ I ] ((A i) → x)
-        ; F₁ = F₁-aux
-        ; identity = refl
-        ; homomorphism = refl
-        ; F-resp-≈ = F-resp-≈-aux 
+      { F₀ = λ x → Σ[ i ∈ I ] ((A i) → x) -- functor on objects
+        ; F₁ = F₁-aux -- functor on morphisms
+        ; identity = refl -- F id = id
+        ; homomorphism = refl -- F (f ∘ g) = Ff ∘ Fg
+        ; F-resp-≈ = F-resp-≈-aux -- f ≈ g ⇒ F₁f ≈ F₁g
       }
     where
       F₁-aux : {A = B : Set o} {C : Set o} →
