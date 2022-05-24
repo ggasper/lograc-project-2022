@@ -28,7 +28,7 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
   open HomReasoning
   open Initial I
   open Functor F renaming (identity to identity-F)
-  open IsInitial ⊥-is-initial renaming (! to ⊥→A ; !-unique₂ to ⊥→A-unique₂)
+  open IsInitial ⊥-is-initial renaming (! to ⊥→B ; !-unique₂ to ⊥→B-unique₂)
   open F-Algebra ⊥
 
   LambekLemma : F₀ A ≅ A
@@ -49,7 +49,7 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
       i-morphism : 
         (F-algebra-category F Category.⇒ ⊥) 
         (record { A = F₀ A ; α = F₁ α })
-      i-morphism = ⊥→A {record 
+      i-morphism = ⊥→B {record 
                         { A = F₀ A ;
                           α = F₁ α}
                         }
@@ -88,7 +88,7 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
         and that α ∘ᶜ iᶜ, idᶜ are both such morphisms.
       -}
       isoʳ-aux : α ∘ᶜ i ≈ᶜ idᶜ
-      isoʳ-aux = ⊥→A-unique₂ α∘i-morph id-f-morph
+      isoʳ-aux = ⊥→B-unique₂ α∘i-morph id-f-morph
 
       {-
         Proof that i ∘ᶜ αᶜ ≈ idᶜ that follows from α ∘ᶜ i ≈ᶜ idᶜ and
