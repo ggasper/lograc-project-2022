@@ -14,8 +14,10 @@
 \usepackage{colortbl}
 \usepackage[all]{xy}
 \usepackage{tikz-cd}
+\usepackage{hyperref}
+\usepackage[backend=bibtex,style=authoryear, defernumbers=true]{biblatex}
 
-
+\addbibresource{citations.bib}
 %\beamertemplatenavigationsymbolsempty
 
 \title{Algebras for a Functor}
@@ -135,6 +137,19 @@ If $I = (A, \alpha)$ is an initial algebra, then $A$ is isomorphic to $FA$ via $
 \end{itemize}
 
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Future work}
+\begin{itemize}
+\item implement presentation of natural numbers with F-algebras
+\item implement presentation of lists with F-algebras
+\item generalize polynomial functors
+\item generalize existance of initial algebras
+\end{itemize}
+
+
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{Problems in Implementation}
@@ -150,20 +165,13 @@ If $I = (A, \alpha)$ is an initial algebra, then $A$ is isomorphic to $FA$ via $
 Initial $I\ \Rightarrow$ record $\{\ \bot \ ,\ \bot \text{-is-initial}\ \}\ \Rightarrow$ record $\{\ A \ ,\ \alpha \ \}$ .
 
 \end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-\frametitle{Future work}
-\begin{itemize}
-\item implement presentation of natural numbers with F-algebras
-\item implement presentation of lists with F-algebras
-\item generalize polynomial functors
-\item generalize existance of initial algebras
-\end{itemize}
-
-
+  \frametitle{Sources}
+  \nocite{*}
+  \printbibliography
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 
 
