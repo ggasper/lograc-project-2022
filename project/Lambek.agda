@@ -84,8 +84,8 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
         }
 
       {-
-        Shows that α ∘ᶜ iᶜ ≈ idᶜ by using that there is only one morphism from ⊥ to ⊥
-        and that α ∘ᶜ iᶜ, idᶜ are both such morphisms.
+        Shows that α ∘ᶜ i ≈ idᶜ by using that there is only one morphism from ⊥ to ⊥
+        and that α ∘ᶜ i, idᶜ are both such morphisms.
       -}
       isoʳ-aux : α ∘ᶜ i ≈ᶜ idᶜ
       isoʳ-aux = ⊥→B-unique₂ α∘i-morph id-f-morph
