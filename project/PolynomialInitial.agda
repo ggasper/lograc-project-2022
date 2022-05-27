@@ -33,7 +33,7 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
   -- The definition of the initial object in a polynomial category
   polynomial-initial : Initial polynomial-category
   polynomial-initial = record { 
-    ⊥ = ⊥-aux ;
+    ⊥ = μF-aux ;
     ⊥-is-initial = is-initial-aux
     }
 
@@ -45,8 +45,8 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
       α-aux s = Node s
       
       -- The initial object for the category of the polynomial functor
-      ⊥-aux : Obj
-      ⊥-aux = record { 
+      μF-aux : Obj
+      μF-aux = record { 
         A = Tree ; 
         α = α-aux 
         }
@@ -62,7 +62,7 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
           )
 
       -- F-algebra morphism from the initial object to any other object in the F-algebra category of a polynomial functor.
-      !-aux : {B : F-Algebra (polynomial-functor A)} → F-Algebra-Morphism ⊥-aux B
+      !-aux : {B : F-Algebra (polynomial-functor A)} → F-Algebra-Morphism μF-aux B
       !-aux {B} = record { 
         f = f-tree-aux {B} ; 
         commutes = refl 
@@ -70,7 +70,7 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
 
       -- Proof that the morphism from the initial object is unique.
       !-unique-aux : {A = B : F-Algebra (polynomial-functor A)}
-        → (f : F-Algebra-Morphism ⊥-aux B) 
+        → (f : F-Algebra-Morphism μF-aux B) 
         → (Sets o [ f-tree-aux {B} ≈ F-Algebra-Morphism.f f ])
       !-unique-aux 
         {A = record { A = B ; α = β }} 
@@ -89,7 +89,7 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
             f (Node (i , g))
           ∎
 
-      is-initial-aux : IsInitial polynomial-category ⊥-aux
+      is-initial-aux : IsInitial polynomial-category μF-aux
       is-initial-aux = record {   
         ! = !-aux ; -- function that gives the morphism from the initial object to any other object
         !-unique = !-unique-aux -- uniqueness of said morphism

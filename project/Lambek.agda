@@ -26,10 +26,10 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
     ∘-resp-≈ to ∘-resp-≈ᶜ ; ∘-resp-≈ʳ to ∘-resp-≈ʳᶜ ; _⇒_ to _⇒ᶜ_ ; _∘_ to _∘ᶜ_)
   open import Categories.Morphism C
   open HomReasoning
-  open Initial I
+  open Initial I renaming (⊥ to μF ; ⊥-is-initial to μF-is-initial)
   open Functor F renaming (identity to identity-F)
-  open IsInitial ⊥-is-initial renaming (! to ⊥→B ; !-unique₂ to ⊥→B-unique₂)
-  open F-Algebra ⊥
+  open IsInitial μF-is-initial renaming (! to μF→B ; !-unique₂ to μF→B-unique₂)
+  open F-Algebra μF
 
   LambekLemma : F₀ A ≅ A
   LambekLemma = record { 
@@ -43,20 +43,20 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
 
     where
       {-
-        The morphism in the F-algebra category from the F-algebra ⊥ to F⊥ where ⊥ is the initial object.
-        Exists because ⊥ is the initial object.
+        The morphism in the F-algebra category from the F-algebra μF to F ( μF ) where μF is the initial object.
+        Exists because μF is the initial object.
       -}
       i-morphism : 
-        (F-algebra-category F Category.⇒ ⊥) 
+        (F-algebra-category F Category.⇒ μF) 
         (record { A = F₀ A ; α = F₁ α })
-      i-morphism = ⊥→B {record 
+      i-morphism = μF→B {record 
                         { A = F₀ A ;
                           α = F₁ α}
                         }
       open F-Algebra-Morphism i-morphism renaming (f to i)
 
-      -- The identity morphism from ⊥ to ⊥
-      id-f-morph : F-Algebra-Morphism ⊥ ⊥
+      -- The identity morphism from μF to μF
+      id-f-morph : F-Algebra-Morphism μF μF
       id-f-morph = Category.id (F-algebra-category F)
 
       i∘α≈F[α∘i] : i ∘ᶜ α ≈ᶜ F₁ (α ∘ᶜ i)  
@@ -69,8 +69,8 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
           F₁ (α ∘ᶜ i)
         ∎
 
-      -- the F-algebra morphism from ⊥ to ⊥ induced by α ∘ i
-      α∘i-morph : F-Algebra-Morphism ⊥ ⊥
+      -- the F-algebra morphism from μF to μF induced by α ∘ i
+      α∘i-morph : F-Algebra-Morphism μF μF
       α∘i-morph = record { 
         f = α ∘ᶜ i ; 
         commutes = 
@@ -84,11 +84,11 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
         }
 
       {-
-        Shows that α ∘ᶜ i ≈ idᶜ by using that there is only one morphism from ⊥ to ⊥
+        Shows that α ∘ᶜ i ≈ idᶜ by using that there is only one morphism from μF to μF
         and that α ∘ᶜ i, idᶜ are both such morphisms.
       -}
       isoʳ-aux : α ∘ᶜ i ≈ᶜ idᶜ
-      isoʳ-aux = ⊥→B-unique₂ α∘i-morph id-f-morph
+      isoʳ-aux = μF→B-unique₂ α∘i-morph id-f-morph
 
       {-
         Proof that i ∘ᶜ αᶜ ≈ idᶜ that follows from α ∘ᶜ i ≈ᶜ idᶜ and
