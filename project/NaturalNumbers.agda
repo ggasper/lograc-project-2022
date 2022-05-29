@@ -9,6 +9,7 @@ open import Categories.Morphism.Reasoning
 open import Data.Product using (Σ ; _,_ ; proj₁ ; proj₂ ; Σ-syntax ; _×_ )
 import Relation.Binary.PropositionalEquality as Eq
 open Eq using (_≡_; refl; sym; trans; cong; cong₂; subst)
+open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; step-≡; _∎)
 open import Categories.Object.Initial
 open import FAlgebraCategory
 open import PolynomialFunctor
@@ -54,16 +55,22 @@ Nat-algebra-initial = record {
     ⊥ = Nat-algebra ; 
     ⊥-is-initial = record { 
         ! = !-aux  ; 
-        !-unique = {!   !} } }
+        !-unique = !-unique-aux
+        } }
 
         where
             f-aux : {B-alg : F-Algebra P} → (Sets 0ℓ Category.⇒ F-Algebra.A Nat-algebra) (F-Algebra.A B-alg)
             f-aux {record { A = B ; α = β }} zero = β (false , (λ ()))
-            f-aux {record { A = B ; α = β }} (suc n) = β (true , λ _ → f-aux {record { A = B ; α = β }} n)
+            f-aux {record { A = B ; α = β }} (suc n) =
+              β (true , λ _ → f-aux {record { A = B ; α = β }} n)
             
 
-            commutes-aux : {B-alg : F-Algebra P} → (Sets 0ℓ Category.≈ (Sets 0ℓ Category.∘ (f-aux {B-alg})) (F-Algebra.α Nat-algebra)) ((Sets 0ℓ Category.∘ F-Algebra.α B-alg) (Functor.F₁ P (f-aux {B-alg})))
-            commutes-aux {B-alg} {false , f} = {!   !}
+            commutes-aux : {B-alg : F-Algebra P} →
+              (Sets 0ℓ Category.≈ (Sets 0ℓ Category.∘ (f-aux {B-alg}))
+              (F-Algebra.α Nat-algebra)) ((Sets 0ℓ Category.∘ F-Algebra.α B-alg)
+              (Functor.F₁ P (f-aux {B-alg})))
+            commutes-aux {B-alg} {false , f} =
+              cong (λ x → F-Algebra.α B-alg (false , x)) (fun-ext λ ⊥ → ⊥-elim ⊥)   
             commutes-aux {B-alg} {true , f} = refl
 
 
@@ -72,4 +79,27 @@ Nat-algebra-initial = record {
             !-aux {B-alg} = record { 
                 f = f-aux {B-alg} ; 
                 commutes = commutes-aux {B-alg} }
-
+    
+            !-unique-aux : {A = B-alg : F-Algebra (polynomial-functor A)}
+              (f : F-Algebra-Morphism Nat-algebra B-alg) {x : ℕ} →
+              f-aux {B-alg} x ≡ F-Algebra-Morphism.f f x
+            !-unique-aux B-alg@{A = record {A = B ; α = β}}
+              record { f = f ; commutes = commutes } {zero} =
+                begin
+                  f-aux {B-alg} zero
+                  ≡⟨ refl ⟩
+                  f-aux {B-alg} (F-Algebra.α Nat-algebra ( false , λ ()))
+                  ≡⟨ cong (λ x → β (false , x)) (fun-ext (λ x → ⊥-elim x)) ⟩
+                  (Sets 0ℓ Category.∘ β) (Functor.F₁ P f) (false , (λ ()))
+                  ≡⟨ sym (commutes { false , λ () }) ⟩
+                  f zero
+                ∎
+            !-unique-aux {A = B-alg@record { A = B ; α = β }}
+              f-morphism@record { f = f ; commutes = commutes } {suc n} =
+              begin
+                f-aux {B-alg} (suc n)
+                ≡⟨ cong (λ x → β ( true , x )) (fun-ext λ x → !-unique-aux f-morphism) ⟩
+                β (true , λ _ → f n)
+                ≡⟨ sym commutes ⟩
+                f (suc n)
+              ∎
