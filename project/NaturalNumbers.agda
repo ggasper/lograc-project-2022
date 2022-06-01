@@ -87,7 +87,7 @@ Nat-algebra-initial = record {
         ≈ᶜ 
         β ∘ᶜ F₁ (f-aux {B-alg})
       commutes-aux {B-alg = record { A = B ; α = β }} {false , f} =
-        cong (λ x → β (false , x)) (fun-ext λ ⊥ → ⊥-elim ⊥)   
+        cong (λ x → β (false , x)) (fun-ext λ x → ⊥-elim x)   
       commutes-aux {B-alg} {true , f} = refl
 
       -- The morphism to another object.

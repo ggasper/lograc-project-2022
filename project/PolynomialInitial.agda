@@ -55,10 +55,10 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
       f-tree-aux : {B : F-Algebra (polynomial-functor A)} → 
         Tree → 
         F-Algebra.A B
-      f-tree-aux {record { A = B ; α = β } } (Node (i , g)) = 
+      f-tree-aux {B-alg@record { A = B ; α = β } } (Node (i , g)) = 
         β (
           i , 
-          λ a → f-tree-aux {record { A = B ; α = β }} (g a)
+          λ a → f-tree-aux {B-alg} (g a)
           )
 
       -- F-algebra morphism from the initial object to any other object in the F-algebra category of a polynomial functor.
@@ -73,16 +73,16 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
         → (f : F-Algebra-Morphism μF-aux B) 
         → (Sets o [ f-tree-aux {B} ≈ F-Algebra-Morphism.f f ])
       !-unique-aux 
-        {A = record { A = B ; α = β }} 
-        record { f = f ; commutes = commutes }
+        {A = B-alg@record { A = B ; α = β }} 
+        f-morphism@record { f = f ; commutes = commutes }
         {x = Node (i , g)} = 
           begin
-            f-tree-aux {record { A = B ; α = β }} (Node (i , g))
+            f-tree-aux {B-alg} (Node (i , g))
           ≡⟨ refl ⟩
             β (i , (λ a → f-tree-aux (g a)))
           ≡⟨ cong 
               (λ x → β (i , x)) 
-              (fun-ext λ y → !-unique-aux (record { f = f ; commutes = commutes })) 
+              (fun-ext λ y → !-unique-aux f-morphism) 
             ⟩
             β (i , (λ a → f (g a)))
           ≡⟨ sym commutes ⟩ -- use the commutativity of the diagram of the F-morphism of f

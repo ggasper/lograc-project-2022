@@ -47,7 +47,7 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
         Exists because μF is the initial object.
       -}
       i-morphism : 
-        (F-algebra-category F Category.⇒ μF) 
+        (F-algebra-category F Category.⇒ μF)
         (record { A = F₀ A ; α = F₁ α })
       i-morphism = μF→B {record 
                         { A = F₀ A ;
