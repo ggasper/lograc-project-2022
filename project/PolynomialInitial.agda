@@ -51,17 +51,13 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
         α = α-aux 
         }
 
-      -- Inductive definition of the function from Tree to any F-algebra of a polynomial functor.
+      -- Inductive definition of the function from Tree to any F-algebra B of a polynomial functor.
       f-tree-aux : {B : F-Algebra (polynomial-functor A)} → 
-        Tree → 
-        F-Algebra.A B
+        Tree → F-Algebra.A B
       f-tree-aux {B-alg@record { A = B ; α = β } } (Node (i , g)) = 
-        β (
-          i , 
-          λ a → f-tree-aux {B-alg} (g a)
-          )
+        β ( i , λ a → f-tree-aux {B-alg} (g a) )
 
-      -- F-algebra morphism from the initial object to any other object in the F-algebra category of a polynomial functor.
+      -- The F-algebra morphism from the initial object to any other object in the F-algebra category of a polynomial functor.
       !-aux : {B : F-Algebra (polynomial-functor A)} → F-Algebra-Morphism μF-aux B
       !-aux {B} = record { 
         f = f-tree-aux {B} ; 

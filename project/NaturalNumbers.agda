@@ -25,7 +25,7 @@ private
 {-
   We show an example of the inductive structure for natural numbers
   by defining an initial object in the F-algebra category 
-  of a polynomial functor for a polynomial p ( X ) = 1 + X.
+  of a polynomial functor for a polynomial P ( X ) = 1 + X.
 -}
 A : Bool → Set
 A false = ⊥

@@ -1,11 +1,11 @@
+{-
+  The definition of polynomial functors on the category Sets
+-}
 module PolynomialFunctor where
 
 open import Level
 open import Categories.Category
 open import Categories.Category.Instance.Sets
-{-
-  Defines polynomial functors on the category Sets
--}
 open import Categories.Functor.Algebra
 open import Categories.Functor
 open import Categories.Morphism.Reasoning
@@ -20,7 +20,7 @@ module _ {o : Level} {I : Set o} (A : I → Set o) where
   open Category (Sets o)
   polynomial-functor : Endofunctor (Sets o)
   polynomial-functor = record
-      { F₀ = λ x → Σ[ i ∈ I ] ((A i) → x) -- functor on objects
+      { F₀ = λ X → Σ[ i ∈ I ] ((A i) → X) -- functor on objects
         ; F₁ = F₁-aux -- functor on morphisms
         ; identity = refl -- F id = id
         ; homomorphism = refl -- F (f ∘ g) = Ff ∘ Fg

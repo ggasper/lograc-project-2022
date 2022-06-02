@@ -1,5 +1,5 @@
 {-
-  This file defines the F-Algebra categories
+  The definition of F-Algebra categories
 -}
 
 module FAlgebraCategory where
@@ -29,7 +29,7 @@ module _ {C : Category o ℓ e} (F : Endofunctor C) where
                 ≈ 
               F-Algebra-Morphism.f g 
               ] 
-          ; id = id-aux -- id is the F-algebra that for a given object A consists of A and the identity morphism in the underlying category C
+          ; id = id-aux -- id is the F-algebra that, for a given object A, consists of A and the identity morphism in the underlying category C
           ; _∘_ = composition-aux 
           ; assoc = assocᶜ
           ; sym-assoc = sym-assocᶜ
