@@ -9,15 +9,9 @@ open import Categories.Category.Instance.Sets
 open import Categories.Functor.Algebra
 open import Categories.Functor
 open import Categories.Morphism.Reasoning
-open import Data.Product using (Σ ; _,_ ; proj₁ ; proj₂ ; Σ-syntax ; _×_ )
-import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl; sym; trans; cong; cong₂; subst)
 open import Categories.Object.Initial
 open import FAlgebraCategory
 open import PolynomialFunctor
-
-open import Categories.Morphism.Reasoning
-
 
 private
   variable
