@@ -19,7 +19,7 @@ open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; step-≡; _∎)
 
 
 module _ {o : Level} {I : Set o} (A : I → Set o) where
-  -- The structure representing trees which have children parametrized by Aᵢ
+  -- The structure representing trees which have children parametrized by A i
   data Tree : Set o where 
     Node : Σ[ i ∈ I ] (A i → Tree) → Tree 
 

@@ -34,8 +34,8 @@ module _ {C : Category o ℓ e} (F : Endofunctor  C) (I : Initial (F-algebra-cat
   open IsInitial μF-is-initial renaming (! to μF→B ; !-unique₂ to μF→B-unique₂)
   open F-Algebra μF
 
-  LambekLemma : F₀ A ≅ A
-  LambekLemma = record { 
+  lambek-lemma : F₀ A ≅ A
+  lambek-lemma = record { 
     from = α ; 
     to = i ; 
     iso = record { 
