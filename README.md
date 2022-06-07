@@ -13,7 +13,7 @@ It shows that they form a category and implements the following:
 * `Nat-algebra-initial` : proof that natural numbers can be represented with 
   the help of F-algebras and polynomial functors
 
-* `polynomial-initial` : the existance of initial algebras for F-algebra categories 
+* `polynomial-initial` : the existence of initial algebras for F-algebra categories 
   for polynomial functors
 
 * `lambek-lemma` : the Lambek lemma
