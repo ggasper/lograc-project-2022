@@ -32,3 +32,4 @@ _build/
 *-blx.aux
 *-blx.bib
 *.run.xml
+*.vrb
